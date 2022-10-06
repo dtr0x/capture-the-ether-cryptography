@@ -173,4 +173,13 @@ assert sd_inv < N and sd * sd_inv % N == 1
 # ephemeral private key
 k = (z1-z2) * sd_inv % N
 
+# inverse of r
+r1_inv = (FieldElement(r1, PrimeGaloisField(N)) ** -1).value
+assert r1_inv < N and r1 * r1_inv % N == 1
+
+# account private key
+d = (s1*k - z1) * r1_inv % N
+
+assert w3.toChecksumAddress(addrFromPrivKey(hex(d))) == tx1['from']
+print("Account Takeover challenge successfully passed")
 
